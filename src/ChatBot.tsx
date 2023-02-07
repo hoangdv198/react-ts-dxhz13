@@ -23,9 +23,11 @@ const ChatBot: React.FC = () => {
   const [error, setError] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    if (!input) return;
     event.preventDefault();
     setMessages((pre) => [...pre, { text: input, user: 'user' }]);
     setInput('');
+    setError('');
     try {
       setLoading(true);
       const completion = await openai.createCompletion({
@@ -48,6 +50,7 @@ const ChatBot: React.FC = () => {
       if (error.response) {
         console.log(error.response.status);
         console.log(error.response.data);
+        setError(error.response.data.error.message);
       } else {
         console.log('Error: ', error.message);
       }
@@ -67,7 +70,12 @@ const ChatBot: React.FC = () => {
             {message.text}
           </div>
         ))}
-        {loading && <TypingSpinner />}
+        {loading && (
+          <div className={'bubble'}>
+            <TypingSpinner />
+          </div>
+        )}
+        {error ? <div className={'bubble'}>{error}</div> : null}
       </div>
       <form className="input-form" onSubmit={handleSubmit}>
         <input
