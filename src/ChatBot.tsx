@@ -2,21 +2,25 @@ import React, { useState } from 'react';
 import { Configuration, OpenAIApi } from 'openai';
 
 import './chatbot.css';
+import './bubble.css';
+import TypingSpinner from './TypingSpiner/TypingSpinner';
 
 interface Message {
   user: 'user' | 'bot';
   text: string;
 }
-const API_KEY = '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';
+const API_KEY = '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';
 
 const configuration = new Configuration({
   apiKey: API_KEY,
 });
 const openai = new OpenAIApi(configuration);
+
 const ChatBot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -27,6 +31,11 @@ const ChatBot: React.FC = () => {
       const completion = await openai.createCompletion({
         model: 'text-davinci-003',
         prompt: input,
+        temperature: 0.7,
+        max_tokens: 256,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
       });
       setLoading(false);
       console.log(completion);
@@ -40,27 +49,26 @@ const ChatBot: React.FC = () => {
         console.log(error.response.status);
         console.log(error.response.data);
       } else {
-        console.log(error.message);
+        console.log('Error: ', error.message);
       }
     }
   };
 
   return (
     <div className="chat-bot">
-      <ul className="messages">
+      <div className="messages">
         {messages.map((message, index) => (
-          <li key={index} className={message.user === 'user' ? 'right' : ''}>
+          <div
+            key={index}
+            className={
+              message.user === 'user' ? 'bubble bubble--alt' : 'bubble'
+            }
+          >
             {message.text}
-          </li>
-        ))}
-        {loading && (
-          <div className="loading-indicator">
-            <div className="loading-bar"></div>
-            <div className="loading-bar"></div>
-            <div className="loading-bar"></div>
           </div>
-        )}
-      </ul>
+        ))}
+        {loading && <TypingSpinner />}
+      </div>
       <form className="input-form" onSubmit={handleSubmit}>
         <input
           className="input-field"
