@@ -23,36 +23,70 @@
   overflow: auto;
 }
 
+li {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0 0 10px #ccc;
+}
+
 .right {
-  text-align: right;
+  justify-content: flex-end;
+}
+
+.loading-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20%;
+}
+
+.loading-bar {
+  width: 4px;
+  height: 18px;
+  margin: 0 8px;
+  border-radius: 4px;
+  animation: loading 1s ease-in-out infinite;
+}
+
+@keyframes loading {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1, 2.5);
+  }
+  40% {
+    transform: scale(1);
+  }
 }
 
 .input-form {
   display: flex;
-  padding: 20px;
+  height: 20%;
 }
 
 .input-field {
   flex: 1;
-  height: 40px;
   padding: 10px;
-  border-radius: 20px;
-  border: 1px solid #ccc;
   font-size: 16px;
-  outline: none;
+  border: none;
+  border-radius: 10px 0 0 10px;
 }
 
 .send-button {
   width: 100px;
-  height: 40px;
-  background-color: #4caf50;
+  padding: 10px;
+  background-color: #0079d3;
   color: #fff;
+  font-weight: bold;
   border: none;
-  border-radius: 20px;
-  font-size: 16px;
+  border-radius: 0 10px 10px 0;
   cursor: pointer;
-}
-
-.send-button:hover {
-  background-color: #3e8e41;
 }
